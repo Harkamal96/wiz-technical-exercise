@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tasky-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tasky
+  template:
+    metadata:
+      labels:
+        app: tasky
+    spec:
+      containers:
+      - name: tasky
+        image: wiztaskregistry.azurecr.io/wiz-tasky-app:v2
+        ports:
+        - containerPort: 8080
+        env:
+        - name: MONGODB_URI
+          value: mongodb://admin:admin123@10.0.0.4:27017/?authSource=admin
+
