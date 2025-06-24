@@ -1,4 +1,4 @@
-name: Build and Push to ACR
+name: Build and Push to DockerHub
 
 on:
   push:
@@ -10,17 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout source
         uses: actions/checkout@v3
 
-      - name: Log in to Azure Container Registry
-        run: |
-          echo "${{ secrets.ACR_PASSWORD }}" | docker login ${{ secrets.ACR_LOGIN_SERVER }} -u ${{ secrets.ACR_USERNAME }} --password-stdin
+      - name: Log in to DockerHub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
       - name: Build Docker image
-        run: |
-          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/wiz-tasky-app:v3 ./docker
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/tasky:latest ./docker
 
       - name: Push Docker image
-        run: |
-          docker push ${{ secrets.ACR_LOGIN_SERVER }}/wiz-tasky-app:v3
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/tasky:latest
