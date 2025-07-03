@@ -13,6 +13,7 @@ resource "azurerm_resource_group" "wizrg" {
   location = "eastus"
 }
 
+
 resource "azurerm_virtual_network" "wiz_vnet" {
   name                = "wiz-vnet"
   address_space       = ["10.0.0.0/16"]
