@@ -53,5 +53,5 @@ jobs:
     - name: Update AKS deployment
       run: |
         echo "🚀 Updating deployment to image: $REGISTRY_NAME/$IMAGE_NAME:$IMAGE_TAG"
-        kubectl set image deployment/tasky-deployment tasky-container=$REGISTRY_NAME/$IMAGE_NAME:$IMAGE_TAG
+        kubectl set image deployment/tasky-deployment tasky=$REGISTRY_NAME/$IMAGE_NAME:$IMAGE_TAG
         kubectl rollout status deployment/tasky-deployment
