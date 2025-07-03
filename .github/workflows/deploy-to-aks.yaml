@@ -1,4 +1,4 @@
-name: Build and Deploy Tasky App to AKS
+name: Build and Deploy App to AKS
 
 on:
   push:
@@ -33,25 +33,25 @@ jobs:
 
     - name: Build Docker image from ./docker
       run: |
-        echo "📦 Building Docker image from ./docker"
+        echo "Building Docker image from ./docker"
         docker build -t $REGISTRY_NAME/$IMAGE_NAME:$IMAGE_TAG ./docker
         docker tag $REGISTRY_NAME/$IMAGE_NAME:$IMAGE_TAG $REGISTRY_NAME/$IMAGE_NAME:latest
 
     - name: Push both image tags to ACR
       run: |
-        echo "🔐 Logging into ACR and pushing images"
+        echo "Logging into ACR and pushing images"
         az acr login --name ${{ secrets.REGISTRY_NAME }}
         docker push $REGISTRY_NAME/$IMAGE_NAME:$IMAGE_TAG
         docker push $REGISTRY_NAME/$IMAGE_NAME:latest
 
     - name: Set AKS context
       run: |
-        echo "🎯 Setting AKS context"
+        echo "Setting AKS context"
         az aks get-credentials --name ${{ secrets.AKS_CLUSTER }} \
           --resource-group ${{ secrets.RESOURCE_GROUP }} --overwrite-existing
 
     - name: Update AKS deployment
       run: |
-        echo "🚀 Updating deployment to image: $REGISTRY_NAME/$IMAGE_NAME:$IMAGE_TAG"
+        echo "Updating deployment to image: $REGISTRY_NAME/$IMAGE_NAME:$IMAGE_TAG"
         kubectl set image deployment/tasky-deployment tasky=$REGISTRY_NAME/$IMAGE_NAME:$IMAGE_TAG
         kubectl rollout status deployment/tasky-deployment
